@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Teddys Jira Assistant",
+  "version": "1.0",
+  "icons": {
+    "32": "img/icon.png",
+    "64": "img/icon64.png",
+    "128": "img/icon128.png"
+  },
+  "action": {
+    "default_title": "Teddys Jira Assistant",
+    "default_popup": "popup.html"
+  },
+  "content_security_policy": {
+    "extension_page": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage", "activeTab", "tabs"],
+  "host_permissions": ["https://104corp.atlassian.net/jira/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://104corp.atlassian.net/*"],
+      "js": ["contentScript.js"]
+    }
+  ]
+}

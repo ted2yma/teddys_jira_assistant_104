@@ -1,9 +1,0 @@
-{
-  "manifest_version": 3,
-  "name": "Teddys Jira Assistant",
-  "version": "1.0",
-  "permissions": ["tabs", "activeTab"],
-  "background": {
-    "script": ["dist/main.js"]
-  }
-}
