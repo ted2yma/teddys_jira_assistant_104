@@ -12,7 +12,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ App)
 /* harmony export */ });
-/* harmony import */ var _chakra_ui_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @chakra-ui/react */ "./node_modules/@chakra-ui/button/dist/chunk-UVUR7MCU.mjs");
+/* harmony import */ var _chakra_ui_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @chakra-ui/react */ "./node_modules/@chakra-ui/layout/dist/chunk-PULVB27S.mjs");
+/* harmony import */ var _chakra_ui_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @chakra-ui/react */ "./node_modules/@chakra-ui/layout/dist/chunk-KRPLQIP4.mjs");
+/* harmony import */ var _chakra_ui_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @chakra-ui/react */ "./node_modules/@chakra-ui/layout/dist/chunk-2OOHT3W5.mjs");
+/* harmony import */ var _chakra_ui_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @chakra-ui/react */ "./node_modules/@chakra-ui/switch/dist/chunk-VTV6N5LE.mjs");
+/* harmony import */ var _chakra_ui_react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @chakra-ui/react */ "./node_modules/@chakra-ui/button/dist/chunk-UVUR7MCU.mjs");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -28,44 +32,63 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 function App() {
     const [isClean, setIsClean] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+    const [prod, setProd] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
     (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+        chrome.tabs.query({
+            currentWindow: true,
+            active: true,
+        }).then(curr => {
+            chrome.tabs.sendMessage(curr[0].id, {
+                action: "getProjectData",
+            }, (res) => {
+                setProd(res.product);
+            });
+        });
         chrome.storage.local.get(["isClean"]).then((res) => {
-            console.log(res);
             setIsClean(res["isClean"]);
         });
     }, []);
-    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null,
-        "isClean: ",
-        isClean ? `true` : `false`,
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_1__.Button, { onClick: () => {
-                chrome.storage.local.set({ isClean: false }).then(() => __awaiter(this, void 0, void 0, function* () {
+    console.log(prod);
+    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_1__.Box, { pb: "4" },
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_2__.Flex, { w: '250px',
+            h: '250px',
+            justify: `center`,
+            align: `center`,
+            flexFlow: `column wrap` },
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_3__.Text, { as: 'h1', fontSize: 'xl', mb: "4" },
+                "\u5168\u9801\u6A21\u5F0F",
+                isClean ? `開啟` : `關閉`),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_4__.Switch, { isChecked: isClean, size: 'lg', onChange: (evt) => {
+                    chrome.storage.local.set({ isClean: false }).then(() => __awaiter(this, void 0, void 0, function* () {
+                        const curr = yield chrome.tabs.query({
+                            currentWindow: true,
+                            active: true,
+                        });
+                        chrome.tabs.sendMessage(curr[0].id, {
+                            action: "clearJiraTop",
+                            isClean: !isClean,
+                        }, (res) => {
+                            console.log(res);
+                        });
+                        setIsClean(!isClean);
+                    }));
+                } })),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_2__.Flex, { justify: 'center', pt: '4', px: '4', borderTop: '1px solid #ddd', flexFlow: 'row wrap' },
+            prod && react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_3__.Text, { as: 'h3', textAlign: 'center', mb: '4' }, prod),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_5__.Button, { colorScheme: 'teal', onClick: () => __awaiter(this, void 0, void 0, function* () {
                     const curr = yield chrome.tabs.query({
                         currentWindow: true,
                         active: true,
                     });
                     chrome.tabs.sendMessage(curr[0].id, {
-                        action: "clearJiraTop",
-                        isClean: !isClean,
+                        action: "getProjectData",
                     }, (res) => {
                         console.log(res);
+                        navigator.clipboard.writeText(res.product).then(() => {
+                            alert("copy!");
+                        });
                     });
-                    setIsClean(!isClean);
-                }));
-            } }, "switch"),
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_1__.Button, { onClick: () => __awaiter(this, void 0, void 0, function* () {
-                const curr = yield chrome.tabs.query({
-                    currentWindow: true,
-                    active: true,
-                });
-                chrome.tabs.sendMessage(curr[0].id, {
-                    action: "getProjectData",
-                }, (res) => {
-                    console.log(res);
-                    navigator.clipboard.writeText(res.product).then(() => {
-                        alert("copy!");
-                    });
-                });
-            }) }, "Getter")));
+                }) }, "\u8907\u88FD\u5DE5\u55AE"))));
 }
 
 
@@ -279,7 +302,7 @@ root.render(react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__W
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_react-dom_client_js-node_modules_chakra-ui_button_dist_chunk-UVUR7MCU_mj-d35e16"], () => (__webpack_require__("./src/popup.tsx")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_react-dom_client_js-node_modules_chakra-ui_button_dist_chunk-UVUR7MCU_mj-9ef1a4"], () => (__webpack_require__("./src/popup.tsx")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
