@@ -33,23 +33,37 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 function App() {
     const [isClean, setIsClean] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
     const [prod, setProd] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+    const [isJira, setIsJira] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+    const cache = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
     (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-        chrome.tabs.query({
-            currentWindow: true,
-            active: true,
-        }).then(curr => {
-            chrome.tabs.sendMessage(curr[0].id, {
-                action: "getProjectData",
-            }, (res) => {
-                setProd(res.product);
+        let ignore = false;
+        if (!cache.current) {
+            chrome.tabs.query({
+                currentWindow: true,
+                active: true,
+            }).then(curr => {
+                if (curr[0].url.includes('https://104corp.atlassian.net/jira')) {
+                    setIsJira(true);
+                    chrome.tabs.sendMessage(curr[0].id, {
+                        action: "getProjectData",
+                    }, (res) => {
+                        setProd(res.product);
+                    });
+                    chrome.storage.local.get(["isClean"]).then((res) => {
+                        setIsClean(res["isClean"]);
+                    });
+                    // async function fetchApi () {
+                    //   const response = await fetch('https://104corp.atlassian.net/rest/boards/latest/board/316?activeQuickFilters=3670&hideCardExtraFields=true&includeHidden=true&moduleKey=agile-mobile-board-service&onlyUseEpicsFromIssues=true');
+                    //   const resData = await response.json();
+                    //   return resData.data;
+                    // }
+                    // const response = fetchApi();
+                }
             });
-        });
-        chrome.storage.local.get(["isClean"]).then((res) => {
-            setIsClean(res["isClean"]);
-        });
+        }
+        return () => { ignore = true; };
     }, []);
-    console.log(prod);
-    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_1__.Box, { pb: "4" },
+    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_1__.Box, { pb: "4" }, isJira ? (react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null,
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_2__.Flex, { w: '250px',
             h: '250px',
             justify: `center`,
@@ -88,7 +102,11 @@ function App() {
                             alert("copy!");
                         });
                     });
-                }) }, "\u8907\u88FD\u5DE5\u55AE"))));
+                }) }, "\u8907\u88FD\u5DE5\u55AE")))) : (react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_2__.Flex, { w: '250px',
+        h: '250px',
+        justify: `center`,
+        align: `center` },
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_3__.Text, { as: 'h1', fontSize: 'xl', textAlign: 'center' }, "\u4F60\u6C92\u5728Jira\u9801\u9762\u9912...")))));
 }
 
 

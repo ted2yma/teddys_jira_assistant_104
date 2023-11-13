@@ -7,24 +7,25 @@
     "watch": "webpack --watch --progress --config webpack.config.js"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@chakra-ui/react": "^2.8.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@types/chrome": "^0.0.248",
     "@types/react": "^18.2.34",
     "@types/react-dom": "^18.2.14",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.8.1",
+    "framer-motion": "^10.16.4",
     "html-webpack-plugin": "^5.5.3",
     "style-loader": "^3.3.3",
-    "webpack": "^5.89.0",
-    "webpack-cli": "^5.1.4",
-    "@chakra-ui/react": "^2.8.1",
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "framer-motion": "^10.16.4",
     "ts-loader": "^9.5.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
   }
 }
