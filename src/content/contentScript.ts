@@ -8,16 +8,23 @@
         sendResponse({ isClean: message.isClean });
         return true;
 
-      case "getProjectData":
-        const product_raw = getProjectData();
-        const product = product_raw.id ? `${product_raw.id} ${product_raw.name}` : ''
-        sendResponse({ product });
-        return true;
+      // case "getProjectData":
+      //   const product_raw = getProjectData();
+      //   const product = product_raw.id ? `${product_raw.id} ${product_raw.name}` : ''
+      //   sendResponse({ product });
+      //   return true;
 
       default:
         break;
     }
   });
+
+  const getheader = document.querySelector('div[data-component-selector="jira-issue-view-issue-page-grid-padding-override"]') as HTMLElement;
+  if (getheader) {
+    const targetElement = getheader.querySelector('div > div > div > div:nth-of-type(2) > div') as HTMLElement;
+    console.log(targetElement)
+  }
+
 })();
 
 function getProjectData(): { id: string|undefined, name: string|undefined } {

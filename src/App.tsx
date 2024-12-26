@@ -143,7 +143,7 @@ export default function App() {
                 as: 'h1',
                 fontSize: '5xl',
                 textAlign: `center`
-              }}>{(progress.done.hours / progress.total.hours) * 100}%</Text>
+              }}>{Number(((progress.done.hours / progress.total.hours) * 100).toFixed(2))}%</Text>
             </VStack>
             <HStack spacing='4'>
               <Text fontSize='md'>已完成</Text>
@@ -197,22 +197,23 @@ export default function App() {
                 size='lg'
                 onChange={(evt: ChangeEvent<HTMLInputElement>) => {
                   chrome.storage.local.set({ isClean: false }).then(async () => {
-                    const curr = await chrome.tabs.query({
+                    chrome.tabs.query({
                       currentWindow: true,
                       active: true,
-                    });
-
-                    chrome.tabs.sendMessage(
-                      curr[0].id,
-                      {
-                        action: "clearJiraTop",
-                        isClean: !isClean,
-                      },
-                      (res) => {
-                        console.log(res);
-                      }
-                    );
-                    setIsClean(!isClean);
+                    }).then(q => {
+                      console.log(q[0].id);
+                      chrome.tabs.sendMessage(
+                        q[0].id,
+                        {
+                          action: "clearJiraTop",
+                          isClean: !isClean,
+                        },
+                        (res) => {
+                          console.log(res);
+                        }
+                      );
+                      setIsClean(!isClean);
+                    })
                   });
                 }}
               />
